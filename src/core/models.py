@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db import models
 from django.utils import timezone
 
@@ -9,15 +11,12 @@ class TimeStampedModel(models.Model):
     class Meta:
         abstract = True
 
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None, # noqa
-    ) -> None:
-        # https://docs.djangoproject.com/en/5.1/ref/models/fields/#django.db.models.DateField.auto_now
+    def save(self, *args: Any, **kwargs: Any) -> None:
         self.updated_at = timezone.now()
-
-        if isinstance(update_fields, list):
-            update_fields.append('updated_at')
-        elif isinstance(update_fields, set):
-            update_fields.add('updated_at')
-
-        super().save(force_insert, force_update, using, update_fields)
+        
+        if 'update_fields' in kwargs and kwargs['update_fields'] is not None:
+            update_fields = set(kwargs['update_fields'])
+            update_fields.add("updated_at")
+            kwargs['update_fields'] = update_fields
+        
+        super().save(*args, **kwargs)
