@@ -33,6 +33,7 @@ Tech stack:
 - Используется structlog для логирования.
 
 Схема архитектурного решения:
+![image](https://github.com/user-attachments/assets/04ba3368-c613-48da-9739-6b5039e34859)
 
 [Пользовательский запрос] 
        |
